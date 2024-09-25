@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  postgresql:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: project3212_user
+      POSTGRES_PASSWORD: vyI6IehwYeLSq86XzhK2EhVIFrOVA4FN
+      POSTGRES_DB: project3212
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  book_catalog:
+    build: ./book_catalog
+    container_name: book_catalog
+    depends_on:
+      - postgresql
+    environment:
+      DATABASE_URL: "postgresql://project3212_user:vyI6IehwYeLSq86XzhK2EhVIFrOVA4FN@dpg-crlsoqg8fa8c739t4220-a.oregon-postgres.render.com/project3212"
+    ports:
+      - "8000:8000"
+
+  inventory_management:
+    build: ./inventory_management
+    container_name: inventory_management
+    depends_on:
+      - postgresql
+    environment:
+      DATABASE_URL: "postgresql://project3212_user:vyI6IehwYeLSq86XzhK2EhVIFrOVA4FN@dpg-crlsoqg8fa8c739t4220-a.oregon-postgres.render.com/project3212"
+    ports:
+      - "8001:8001"
+
+volumes:
+  postgres_data:
